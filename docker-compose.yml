@@ -1,6 +1,13 @@
 version: '3.8'
 
 services:
+  app:
+    build: .
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/space_x
+    command: ["python", "app/main.py"]
   db:
     image: postgres:14.1-alpine
     restart: always
@@ -9,7 +16,7 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=space_x
     ports:
-      - '5432:5432'
+      - '5432'
     volumes: 
       - db:/var/lib/postgresql/data
 volumes:

@@ -1,11 +1,18 @@
 FROM python:3.11
 
-RUN pip install --upgrade pip
-RUN pip install --no-cache-dir poetry
-WORKDIR /app
-COPY pyproject.toml poetry.lock /app/
-RUN poetry config virtualenvs.create false \
-    && poetry install --no-dev --no-interaction --no-ansi
+#================================================
+# Envs
+#================================================
+ENV PYTHONUNBUFFERED 1
 
-COPY . /app
-CMD ["python", "main.py"]
+#================================================
+# App Code
+#================================================
+RUN mkdir /app
+WORKDIR /app
+#================================================
+# Install Packages
+#================================================
+ADD ./requirements.txt .
+RUN pip install -r requirements.txt
+ADD . /app/

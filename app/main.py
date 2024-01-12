@@ -1,3 +1,4 @@
+import time
 from typing import List, Dict
 
 from sqlalchemy import create_engine
@@ -9,18 +10,29 @@ from config import DATABASE_URL, logger
 
 
 def setup_database() -> sessionmaker:
-    # Create the database engine
-    engine = create_engine(DATABASE_URL)
-    logger.info(f"Connected to database via engine {engine}")
-    # Bind the engine to the metadata of the Base class, so that the declaratives can be accessed
-    Base.metadata.create_all(engine)
-    logger.info("Created all tables")
+    counter = 0
+    while True:
+        try:
+            # Create the database engine
+            engine = create_engine(DATABASE_URL)
+            logger.info(f"Connected to database via engine {engine}")
+            # Bind the engine to the metadata of the Base class, so that the declaratives can be accessed
+            Base.metadata.create_all(engine)
+            logger.info("Created all tables")
 
-    # Create a session factory
-    Session = sessionmaker(bind=engine)
-    logger.info("Created session factory")
+            # Create a session factory
+            Session = sessionmaker(bind=engine)
+            logger.info("Created session factory")
 
-    return Session()
+            return Session()
+        except Exception as e:
+            if counter > 5:
+                logger.error("Could not connect to database after 5 retries")
+                raise e
+            logger.error(f"Error connecting to database: {e}")
+            logger.info("Retrying in 5 seconds...")
+            time.sleep(5)
+            counter += 1
 
 
 def poll_launces(*args, **kwargs) -> List[Dict]:
