@@ -9,3 +9,5 @@ TIMEOUT = 5  # seconds
 
 # DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@localhost:5432/{DB_NAME}"
 DATABASE_URL = os.getenv("DATABASE_URL")
+CELERY_BROKER = os.getenv("CELERY_BROKER")
+CELERY_BACKEND = os.getenv("CELERY_BACKEND")

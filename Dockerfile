@@ -8,11 +8,11 @@ ENV PYTHONUNBUFFERED 1
 #================================================
 # App Code
 #================================================
-RUN mkdir /app
-WORKDIR /app
+# RUN mkdir /app
+# WORKDIR /app
 #================================================
 # Install Packages
 #================================================
 ADD ./requirements.txt .
 RUN pip install -r requirements.txt
-ADD . /app/
+ADD . .

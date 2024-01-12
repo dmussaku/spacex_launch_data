@@ -1,4 +1,7 @@
 # In prod I would have pinned the versions of these dependencies
+celery
+celery[redis]
+flower
 loguru
 requests
 sqlalchemy
