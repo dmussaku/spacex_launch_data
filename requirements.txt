@@ -1,0 +1,6 @@
+# In prod I would have pinned the versions of these dependencies
+loguru
+requests
+sqlalchemy
+pytest
+psycopg2-binary
