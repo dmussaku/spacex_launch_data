@@ -4,7 +4,7 @@ import json
 
 @pytest.fixture
 def launches_data():
-    with open('fixtures/launches.json') as f:
+    with open("fixtures/launches.json") as f:
         data = json.loads(f.read())
     return data
 

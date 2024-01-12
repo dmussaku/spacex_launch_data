@@ -8,7 +8,6 @@ from src.client import SpaceXClient
 from config import DATABASE_URL, logger
 
 
-
 def setup_database() -> sessionmaker:
     counter = 0
     while True:
@@ -48,19 +47,21 @@ def poll_launces(*args, **kwargs) -> List[Dict]:
 
     return launches
 
+
 def main():
     # Set up the database and get a working session
     session = setup_database()
 
     # Poll the SpaceX API for launches
     launches = poll_launces()
-    
+
     # atomically add all launches to the database
     with session.begin():
         for launch in launches:
             logger.info(f"Adding launch {launch['id']} to database")
             session.add(Launch(**launch))
     logger.info(f"Added {len(launches)} launches to database")
-        
-if __name__ == '__main__':
+
+
+if __name__ == "__main__":
     main()

@@ -4,8 +4,9 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
+
 class Launch(Base):
-    __tablename__ = 'launches'
+    __tablename__ = "launches"
 
     id = Column(String, primary_key=True)
     flight_number = Column(String)
