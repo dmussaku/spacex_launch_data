@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     working_dir: /app
-    command: 'celery -A app.app worker -l INFO'
+    command: 'celery -A app.app worker -l INFO -B'
     environment:
       - DATABASE_URL=postgresql://user:password@db:5432/space_x
       - CELERY_BROKER=redis://redis:6379/0
@@ -14,13 +14,20 @@ services:
     depends_on:
       - db
       - redis
-  # flower:
-  #   image: mher/flower:0.9.7
-  #   command: ['celery', 'flower', '--broker=redis://redis:6379', '--port=5555']
-  #   expose:
-  #     - 5555:5555
-  #   depends_on:
-  #     - redis
+  flower:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app
+    command: 'celery -A app.app flower'
+    ports:
+      - 5555:5555
+    depends_on:
+      - worker
+      - redis
+    environment:
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0
   db:
     image: postgres:14.1-alpine
     restart: always
